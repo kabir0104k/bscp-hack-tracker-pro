@@ -93,19 +93,19 @@ const BSCPTracker = () => {
   return (
     <div className="space-y-8">
       {/* BSCP Official Progress Header */}
-      <div className="bg-gray-800 border border-gray-700 p-8 rounded">
+      <div className="bg-[#21262d] border border-[#30363d] p-8 rounded-lg">
         <div className="text-center space-y-6">
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-3xl font-bold text-[#f0f6fc]">
             🎯 BSCP Official Progress
           </h2>
           <CircularProgress value={overallProgress} size={140} />
           <div className="text-center space-y-2">
-            <div className="text-gray-300 text-lg">{totalCompleted} of {totalLabs} labs completed</div>
+            <div className="text-[#e6edf3] text-lg">{totalCompleted} of {totalLabs} labs completed</div>
             <div className="flex gap-4 justify-center">
-              <Badge className="bg-gray-700 text-gray-300 border-gray-600">
+              <Badge className="bg-[#161b22] text-[#e6edf3] border-[#30363d] hover:bg-[#30363d]">
                 Core: {coreStats.completed}/{coreStats.total}
               </Badge>
-              <Badge className="bg-gray-700 text-gray-300 border-gray-600">
+              <Badge className="bg-[#161b22] text-[#e6edf3] border-[#30363d] hover:bg-[#30363d]">
                 Specific: {specificStats.completed}/{specificStats.total}
               </Badge>
             </div>
@@ -145,14 +145,14 @@ const BSCPTracker = () => {
       </div>
 
       {!mysteryUnlocked && (
-        <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded">
-          <p className="text-gray-400">🔒 Complete 15+ Core Labs and 5+ Specific Labs to unlock Mystery Labs</p>
+        <div className="text-center p-4 bg-[#21262d] border border-[#30363d] rounded-lg">
+          <p className="text-[#8b949e]">🔒 Complete 15+ Core Labs and 5+ Specific Labs to unlock Mystery Labs</p>
         </div>
       )}
 
       {!examUnlocked && (
-        <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded">
-          <p className="text-gray-400">🔒 Complete all other sections to unlock the Practice Exam</p>
+        <div className="text-center p-4 bg-[#21262d] border border-[#30363d] rounded-lg">
+          <p className="text-[#8b949e]">🔒 Complete all other sections to unlock the Practice Exam</p>
         </div>
       )}
     </div>

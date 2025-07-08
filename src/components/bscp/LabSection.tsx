@@ -26,24 +26,29 @@ const LabSection = ({ title, labs, sectionKey, updateLab, locked = false }: LabS
   const stats = getCompletionStats(labs);
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded">
-      <div className="p-6 border-b border-gray-700">
+    <div className="bg-[#21262d] border border-[#30363d] rounded-lg">
+      <div className="p-6 border-b border-[#30363d]">
         <div className="flex items-center justify-between cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
           <div className="flex items-center gap-3">
-            {locked && <Lock className="w-5 h-5 text-gray-400" />}
-            <h3 className="text-xl font-semibold text-white">{title}</h3>
-            <Badge className="bg-gray-700 text-gray-300 border-gray-600">
+            {locked && <Lock className="w-5 h-5 text-[#8b949e]" />}
+            <h3 className="text-xl font-semibold text-[#f0f6fc]">{title}</h3>
+            <Badge className="bg-[#161b22] text-[#e6edf3] border-[#30363d] hover:bg-[#30363d]">
               {stats.completed}/{stats.total}
             </Badge>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-2xl font-bold text-white">{stats.percentage}%</span>
-            <Button variant="ghost" size="sm" className="p-0 h-8 w-8 text-gray-400 hover:text-white hover:bg-gray-700">
+            <span className="text-2xl font-bold text-[#f0f6fc]">{stats.percentage}%</span>
+            <Button variant="ghost" size="sm" className="p-0 h-8 w-8 text-[#8b949e] hover:text-[#f0f6fc] hover:bg-[#30363d]">
               {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </Button>
           </div>
         </div>
-        <Progress value={stats.percentage} className="h-2 bg-gray-700 mt-4" />
+        <div className="mt-4">
+          <Progress 
+            value={stats.percentage} 
+            className="h-2 bg-[#161b22] [&>div]:bg-[#238636]" 
+          />
+        </div>
       </div>
       
       {isOpen && (

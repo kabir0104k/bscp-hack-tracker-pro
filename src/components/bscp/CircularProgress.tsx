@@ -17,7 +17,7 @@ const CircularProgress = ({ value, size = 120 }: CircularProgressProps) => {
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#374151"
+          stroke="#30363d"
           strokeWidth="8"
           fill="none"
         />
@@ -25,7 +25,7 @@ const CircularProgress = ({ value, size = 120 }: CircularProgressProps) => {
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#10b981"
+          stroke="#238636"
           strokeWidth="8"
           fill="none"
           strokeDasharray={strokeDasharray}
@@ -35,10 +35,10 @@ const CircularProgress = ({ value, size = 120 }: CircularProgressProps) => {
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-4xl font-bold text-white">
+        <span className="text-4xl font-bold text-[#f0f6fc]">
           {value}%
         </span>
-        <span className="text-sm text-gray-400 font-medium">Complete</span>
+        <span className="text-sm text-[#8b949e] font-medium">Complete</span>
       </div>
     </div>
   );
