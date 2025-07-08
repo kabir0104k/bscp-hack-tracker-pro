@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -106,6 +105,50 @@ const BSCPTracker = () => {
   const totalLabs = Object.values(labs).flat().length;
   const overallProgress = Math.round((totalCompleted / totalLabs) * 100);
 
+  const CircularProgress = ({ value, size = 120 }: { value: number; size?: number }) => {
+    const radius = size / 2 - 8;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDasharray = circumference;
+    const strokeDashoffset = circumference - (value / 100) * circumference;
+
+    return (
+      <div className="relative flex items-center justify-center">
+        <svg width={size} height={size} className="transform -rotate-90">
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="rgba(148, 163, 184, 0.3)"
+            strokeWidth="8"
+            fill="none"
+          />
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="url(#gradient)"
+            strokeWidth="8"
+            fill="none"
+            strokeDasharray={strokeDasharray}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            className="transition-all duration-500 ease-in-out"
+          />
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#a855f7" />
+              <stop offset="100%" stopColor="#06b6d4" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div className="absolute flex flex-col items-center">
+          <span className="text-3xl font-bold text-purple-400">{value}%</span>
+          <span className="text-sm text-slate-400">Complete</span>
+        </div>
+      </div>
+    );
+  };
+
   const renderSection = (title: string, sectionLabs: Lab[], sectionKey: keyof typeof labs, locked = false) => {
     const stats = getCompletionStats(sectionLabs);
     
@@ -175,10 +218,9 @@ const BSCPTracker = () => {
       <Card className="bg-gradient-to-br from-purple-900/30 to-slate-900/80 border-purple-500/30 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-2xl text-center">🎯 BSCP Official Progress</CardTitle>
-          <div className="text-center space-y-2">
-            <div className="text-4xl font-bold text-purple-400">{overallProgress}%</div>
-            <div className="text-slate-400">{totalCompleted} of {totalLabs} labs completed</div>
-            <Progress value={overallProgress} className="h-3 bg-slate-700" />
+          <div className="flex flex-col items-center space-y-4">
+            <CircularProgress value={overallProgress} />
+            <div className="text-slate-400 text-center">{totalCompleted} of {totalLabs} labs completed</div>
           </div>
         </CardHeader>
       </Card>

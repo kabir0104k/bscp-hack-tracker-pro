@@ -12,19 +12,37 @@ import ExploitTracker from '@/components/ExploitTracker';
 
 const Index = () => {
   const [dailyStreak, setDailyStreak] = useState(0);
+  const [lastStreakDate, setLastStreakDate] = useState<string>('');
   const { toast } = useToast();
 
   useEffect(() => {
     const savedStreak = localStorage.getItem('bscp-daily-streak');
+    const savedDate = localStorage.getItem('bscp-last-streak-date');
     if (savedStreak) {
       setDailyStreak(parseInt(savedStreak));
+    }
+    if (savedDate) {
+      setLastStreakDate(savedDate);
     }
   }, []);
 
   const incrementStreak = () => {
+    const today = new Date().toDateString();
+    
+    if (lastStreakDate === today) {
+      toast({
+        title: "⏰ Already Updated Today!",
+        description: "You can only update your streak once per day. Come back tomorrow!",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const newStreak = dailyStreak + 1;
     setDailyStreak(newStreak);
+    setLastStreakDate(today);
     localStorage.setItem('bscp-daily-streak', newStreak.toString());
+    localStorage.setItem('bscp-last-streak-date', today);
     toast({
       title: "🔥 Streak Updated!",
       description: `You're on a ${newStreak} day hacking streak! Keep it up!`,
@@ -32,7 +50,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white">
       {/* Header */}
       <div className="border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/80 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -63,51 +81,6 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
-        {/* Quick Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-slate-700/50 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-500/20 rounded-lg">
-                  <Target className="w-6 h-6 text-purple-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-purple-400">37</p>
-                  <p className="text-slate-400 text-sm">Total BSCP Labs</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-slate-700/50 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-cyan-500/20 rounded-lg">
-                  <Brain className="w-6 h-6 text-cyan-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-cyan-400">110+</p>
-                  <p className="text-slate-400 text-sm">Exploit Techniques</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-slate-700/50 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-500/20 rounded-lg">
-                  <Zap className="w-6 h-6 text-green-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-green-400">{dailyStreak}</p>
-                  <p className="text-slate-400 text-sm">Day Streak</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* BSCP Official Progress */}
         <BSCPTracker />
 
