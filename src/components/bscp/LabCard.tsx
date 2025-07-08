@@ -15,15 +15,15 @@ interface LabCardProps {
 const LabCard = ({ lab, sectionKey, updateLab, locked = false }: LabCardProps) => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Apprentice': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'Practitioner': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'Expert': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      case 'Apprentice': return 'bg-green-800 text-green-300 border-green-700';
+      case 'Practitioner': return 'bg-yellow-800 text-yellow-300 border-yellow-700';
+      case 'Expert': return 'bg-red-800 text-red-300 border-red-700';
+      default: return 'bg-gray-700 text-gray-300 border-gray-600';
     }
   };
 
   return (
-    <div className="border border-slate-700/50 rounded-lg p-4 space-y-3 hover:border-slate-600/50 transition-colors">
+    <div className="border border-gray-700 rounded p-4 space-y-3 bg-gray-850">
       <div className="flex items-start gap-3">
         <Checkbox
           checked={lab.completed}
@@ -33,7 +33,7 @@ const LabCard = ({ lab, sectionKey, updateLab, locked = false }: LabCardProps) =
         />
         <div className="flex-1 space-y-2">
           <div className="flex items-start justify-between gap-2">
-            <h4 className={`font-medium ${lab.completed ? 'line-through text-slate-400' : 'text-white'}`}>
+            <h4 className={`font-medium ${lab.completed ? 'line-through text-gray-400' : 'text-white'}`}>
               {lab.name}
             </h4>
             {lab.completed && <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />}
@@ -42,7 +42,7 @@ const LabCard = ({ lab, sectionKey, updateLab, locked = false }: LabCardProps) =
             <Badge className={getDifficultyColor(lab.difficulty)}>
               {lab.difficulty}
             </Badge>
-            <Badge variant="outline" className="border-slate-600 text-slate-300">
+            <Badge className="bg-gray-700 text-gray-300 border-gray-600">
               {lab.category}
             </Badge>
           </div>
@@ -50,7 +50,7 @@ const LabCard = ({ lab, sectionKey, updateLab, locked = false }: LabCardProps) =
             placeholder="Add your notes, payload, or solution approach..."
             value={lab.notes}
             onChange={(e) => updateLab(sectionKey, lab.id, 'notes', e.target.value)}
-            className="min-h-[60px] bg-slate-800/50 border-slate-600 text-white placeholder-slate-400"
+            className="min-h-[60px] bg-gray-800 border-gray-600 text-white placeholder-gray-400"
             disabled={locked}
           />
         </div>

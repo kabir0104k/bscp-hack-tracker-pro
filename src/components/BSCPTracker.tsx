@@ -1,6 +1,4 @@
-
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import CircularProgress from './bscp/CircularProgress';
 import LabSection from './bscp/LabSection';
@@ -94,32 +92,26 @@ const BSCPTracker = () => {
 
   return (
     <div className="space-y-8">
-      {/* Enhanced BSCP Official Progress Header */}
-      <Card className="bg-gradient-to-br from-purple-900/40 to-slate-800/60 border-purple-500/30 backdrop-blur-sm relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-cyan-600/10 opacity-50"></div>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-cyan-500/20 rounded-full blur-2xl"></div>
-        
-        <CardHeader className="relative z-10">
-          <CardTitle className="text-3xl text-center bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent font-bold">
+      {/* BSCP Official Progress Header */}
+      <div className="bg-gray-800 border border-gray-700 p-8 rounded">
+        <div className="text-center space-y-6">
+          <h2 className="text-3xl font-bold text-white">
             🎯 BSCP Official Progress
-          </CardTitle>
-          <div className="flex flex-col items-center space-y-6 pt-4">
-            <CircularProgress value={overallProgress} size={140} />
-            <div className="text-center space-y-2">
-              <div className="text-slate-300 text-lg">{totalCompleted} of {totalLabs} labs completed</div>
-              <div className="flex gap-4 justify-center">
-                <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
-                  Core: {coreStats.completed}/{coreStats.total}
-                </Badge>
-                <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
-                  Specific: {specificStats.completed}/{specificStats.total}
-                </Badge>
-              </div>
+          </h2>
+          <CircularProgress value={overallProgress} size={140} />
+          <div className="text-center space-y-2">
+            <div className="text-gray-300 text-lg">{totalCompleted} of {totalLabs} labs completed</div>
+            <div className="flex gap-4 justify-center">
+              <Badge className="bg-gray-700 text-gray-300 border-gray-600">
+                Core: {coreStats.completed}/{coreStats.total}
+              </Badge>
+              <Badge className="bg-gray-700 text-gray-300 border-gray-600">
+                Specific: {specificStats.completed}/{specificStats.total}
+              </Badge>
             </div>
           </div>
-        </CardHeader>
-      </Card>
+        </div>
+      </div>
 
       <div className="grid gap-6">
         <LabSection 
@@ -153,14 +145,14 @@ const BSCPTracker = () => {
       </div>
 
       {!mysteryUnlocked && (
-        <div className="text-center p-4 bg-slate-800/50 rounded-lg border border-slate-700/50">
-          <p className="text-slate-400">🔒 Complete 15+ Core Labs and 5+ Specific Labs to unlock Mystery Labs</p>
+        <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded">
+          <p className="text-gray-400">🔒 Complete 15+ Core Labs and 5+ Specific Labs to unlock Mystery Labs</p>
         </div>
       )}
 
       {!examUnlocked && (
-        <div className="text-center p-4 bg-slate-800/50 rounded-lg border border-slate-700/50">
-          <p className="text-slate-400">🔒 Complete all other sections to unlock the Practice Exam</p>
+        <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded">
+          <p className="text-gray-400">🔒 Complete all other sections to unlock the Practice Exam</p>
         </div>
       )}
     </div>
