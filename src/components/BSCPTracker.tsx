@@ -1,19 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Textarea } from '@/components/ui/textarea';
-import { Lock, CheckCircle } from 'lucide-react';
-
-interface Lab {
-  id: string;
-  name: string;
-  category: string;
-  difficulty: 'Apprentice' | 'Practitioner' | 'Expert';
-  completed: boolean;
-  notes: string;
-}
+import CircularProgress from './bscp/CircularProgress';
+import LabSection from './bscp/LabSection';
+import { Lab } from './bscp/types';
 
 const BSCPTracker = () => {
   const [labs, setLabs] = useState<{
@@ -92,121 +83,9 @@ const BSCPTracker = () => {
     return { completed, total: section.length, percentage: Math.round((completed / section.length) * 100) };
   };
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Apprentice': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'Practitioner': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'Expert': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
-    }
-  };
-
   const totalCompleted = Object.values(labs).flat().filter(lab => lab.completed).length;
   const totalLabs = Object.values(labs).flat().length;
   const overallProgress = Math.round((totalCompleted / totalLabs) * 100);
-
-  const CircularProgress = ({ value, size = 120 }: { value: number; size?: number }) => {
-    const radius = size / 2 - 8;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDasharray = circumference;
-    const strokeDashoffset = circumference - (value / 100) * circumference;
-
-    return (
-      <div className="relative flex items-center justify-center">
-        <svg width={size} height={size} className="transform -rotate-90">
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="rgba(148, 163, 184, 0.3)"
-            strokeWidth="8"
-            fill="none"
-          />
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            stroke="url(#gradient)"
-            strokeWidth="8"
-            fill="none"
-            strokeDasharray={strokeDasharray}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            className="transition-all duration-500 ease-in-out"
-          />
-          <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#a855f7" />
-              <stop offset="100%" stopColor="#06b6d4" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <div className="absolute flex flex-col items-center">
-          <span className="text-3xl font-bold text-purple-400">{value}%</span>
-          <span className="text-sm text-slate-400">Complete</span>
-        </div>
-      </div>
-    );
-  };
-
-  const renderSection = (title: string, sectionLabs: Lab[], sectionKey: keyof typeof labs, locked = false) => {
-    const stats = getCompletionStats(sectionLabs);
-    
-    return (
-      <Card className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-slate-700/50 backdrop-blur-sm">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              {locked && <Lock className="w-5 h-5 text-slate-400" />}
-              {title}
-              <Badge variant="outline" className="border-purple-500/30 text-purple-400">
-                {stats.completed}/{stats.total}
-              </Badge>
-            </CardTitle>
-            <span className="text-2xl font-bold text-purple-400">{stats.percentage}%</span>
-          </div>
-          <Progress value={stats.percentage} className="h-2 bg-slate-700" />
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {sectionLabs.map((lab) => (
-            <div key={lab.id} className="border border-slate-700/50 rounded-lg p-4 space-y-3 hover:border-slate-600/50 transition-colors">
-              <div className="flex items-start gap-3">
-                <Checkbox
-                  checked={lab.completed}
-                  onCheckedChange={(checked) => updateLab(sectionKey, lab.id, 'completed', checked)}
-                  className="mt-1"
-                  disabled={locked}
-                />
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <h4 className={`font-medium ${lab.completed ? 'line-through text-slate-400' : 'text-white'}`}>
-                      {lab.name}
-                    </h4>
-                    {lab.completed && <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />}
-                  </div>
-                  <div className="flex gap-2">
-                    <Badge className={getDifficultyColor(lab.difficulty)}>
-                      {lab.difficulty}
-                    </Badge>
-                    <Badge variant="outline" className="border-slate-600 text-slate-300">
-                      {lab.category}
-                    </Badge>
-                  </div>
-                  <Textarea
-                    placeholder="Add your notes, payload, or solution approach..."
-                    value={lab.notes}
-                    onChange={(e) => updateLab(sectionKey, lab.id, 'notes', e.target.value)}
-                    className="min-h-[60px] bg-slate-800/50 border-slate-600 text-white placeholder-slate-400"
-                    disabled={locked}
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-    );
-  };
 
   const coreStats = getCompletionStats(labs.core);
   const specificStats = getCompletionStats(labs.specific);
@@ -214,22 +93,63 @@ const BSCPTracker = () => {
   const examUnlocked = coreStats.completed === coreStats.total && specificStats.completed === specificStats.total && getCompletionStats(labs.mystery).completed === getCompletionStats(labs.mystery).total;
 
   return (
-    <div className="space-y-6">
-      <Card className="bg-gradient-to-br from-purple-900/30 to-slate-900/80 border-purple-500/30 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">🎯 BSCP Official Progress</CardTitle>
-          <div className="flex flex-col items-center space-y-4">
-            <CircularProgress value={overallProgress} />
-            <div className="text-slate-400 text-center">{totalCompleted} of {totalLabs} labs completed</div>
+    <div className="space-y-8">
+      {/* Enhanced BSCP Official Progress Header */}
+      <Card className="bg-gradient-to-br from-purple-900/40 to-slate-800/60 border-purple-500/30 backdrop-blur-sm relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-cyan-600/10 opacity-50"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-cyan-500/20 rounded-full blur-2xl"></div>
+        
+        <CardHeader className="relative z-10">
+          <CardTitle className="text-3xl text-center bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent font-bold">
+            🎯 BSCP Official Progress
+          </CardTitle>
+          <div className="flex flex-col items-center space-y-6 pt-4">
+            <CircularProgress value={overallProgress} size={140} />
+            <div className="text-center space-y-2">
+              <div className="text-slate-300 text-lg">{totalCompleted} of {totalLabs} labs completed</div>
+              <div className="flex gap-4 justify-center">
+                <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+                  Core: {coreStats.completed}/{coreStats.total}
+                </Badge>
+                <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
+                  Specific: {specificStats.completed}/{specificStats.total}
+                </Badge>
+              </div>
+            </div>
           </div>
         </CardHeader>
       </Card>
 
       <div className="grid gap-6">
-        {renderSection("🔧 Core Labs", labs.core, 'core')}
-        {renderSection("🎯 Specific Labs", labs.specific, 'specific')}
-        {renderSection("🔮 Mystery Labs", labs.mystery, 'mystery', !mysteryUnlocked)}
-        {renderSection("🏆 Practice Exam", labs.exam, 'exam', !examUnlocked)}
+        <LabSection 
+          title="🔧 Core Labs" 
+          labs={labs.core} 
+          sectionKey="core" 
+          updateLab={updateLab}
+          locked={false}
+        />
+        <LabSection 
+          title="🎯 Specific Labs" 
+          labs={labs.specific} 
+          sectionKey="specific" 
+          updateLab={updateLab}
+          locked={false}
+        />
+        <LabSection 
+          title="🔮 Mystery Labs" 
+          labs={labs.mystery} 
+          sectionKey="mystery" 
+          updateLab={updateLab}
+          locked={!mysteryUnlocked}
+        />
+        <LabSection 
+          title="🏆 Practice Exam" 
+          labs={labs.exam} 
+          sectionKey="exam" 
+          updateLab={updateLab}
+          locked={!examUnlocked}
+        />
       </div>
 
       {!mysteryUnlocked && (

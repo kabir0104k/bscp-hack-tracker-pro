@@ -1,10 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Flame, Plus, Target, Brain, Zap } from 'lucide-react';
+import { Flame, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import BSCPTracker from '@/components/BSCPTracker';
 import WebSecurityPaths from '@/components/WebSecurityPaths';
@@ -50,7 +48,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white">
+    <div className="min-h-screen bg-slate-950 text-white">
       {/* Header */}
       <div className="border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/80 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
